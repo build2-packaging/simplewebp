@@ -1,73 +1,54 @@
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-
 #include <simplewebp/simplewebp.h>
+
+#include <string.h>
 
 #undef NDEBUG
 #include <assert.h>
 
-#ifdef _WIN32
-#define tmpfile mytmpfile
-static FILE *mytmpfile ();
-#endif
+/* 1x1 lossless WebP (libwebp-test-data one_color_no_palette.webp). */
+static const unsigned char one_color_no_palette_webp[] = {
+  0x52, 0x49, 0x46, 0x46, 0x14, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50,
+  0x56, 0x50, 0x38, 0x4c, 0x08, 0x00, 0x00, 0x00, 0x2f, 0x63, 0xc0, 0x18,
+  0x10, 0x88, 0x88, 0x08
+};
 
-int main ()
+int
+main (void)
 {
-  char b[256];
+  simplewebp *webp = 0;
+  simplewebp_error err;
+  size_t width = 0;
+  size_t height = 0;
+  unsigned char pixel[4];
+  const char *garbage = "not a webp";
 
-  /* Basics.
-   */
-  {
-    FILE *o = tmpfile ();
-    assert (say_hello (o, "World") > 0);
-    rewind (o);
-    assert (fread (b, 1, sizeof (b), o) == 14 &&
-            strncmp (b, "Hello, World!\n", 14) == 0);
-    fclose (o);
-  }
+  assert (simplewebp_version () == 20260718);
+  assert (SIMPLEWEBP_VERSION == 20260718);
+  assert (simplewebp_get_error_text (SIMPLEWEBP_NO_ERROR) != 0);
+  assert (simplewebp_get_error_text (SIMPLEWEBP_NO_ERROR)[0] != '\0');
 
-  /* Empty name.
-   */
-  {
-    FILE *o = tmpfile ();
-    assert (say_hello (o, "") < 0 && errno == EINVAL);
-    fclose (o);
-  }
+  err = simplewebp_load_from_memory ((void *) garbage,
+                                     strlen (garbage),
+                                     0,
+                                     &webp);
+  assert (err == SIMPLEWEBP_NOT_WEBP_ERROR);
+  assert (webp == 0);
 
+  err = simplewebp_load_from_memory ((void *) one_color_no_palette_webp,
+                                     sizeof (one_color_no_palette_webp),
+                                     0,
+                                     &webp);
+  assert (err == SIMPLEWEBP_NO_ERROR);
+  assert (webp != 0);
+
+  simplewebp_get_dimensions (webp, &width, &height);
+  assert (width == 1);
+  assert (height == 1);
+  assert (simplewebp_is_lossless (webp));
+
+  err = simplewebp_decode (webp, pixel, 0);
+  assert (err == SIMPLEWEBP_NO_ERROR);
+
+  simplewebp_unload (webp);
   return 0;
 }
-
-#ifdef _WIN32
-#include <windows.h>
-#include <fcntl.h>
-#include <io.h>
-
-FILE *mytmpfile ()
-{
-  char d[MAX_PATH + 1], p[MAX_PATH + 1];
-  if (GetTempPathA (sizeof (d), d) == 0 ||
-      GetTempFileNameA (d, "tmp", 0, p) == 0)
-    return NULL;
-
-  HANDLE h = CreateFileA (p,
-                          GENERIC_READ | GENERIC_WRITE,
-                          0,
-                          NULL,
-                          CREATE_ALWAYS,
-                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
-                          NULL);
-  if (h == INVALID_HANDLE_VALUE)
-    return NULL;
-
-  int fd = _open_osfhandle ((intptr_t) h, _O_RDWR);
-  if (fd == -1)
-    return NULL;
-
-  FILE *f = _fdopen (fd, "wb+");
-  if (f == NULL)
-    _close (fd);
-
-  return f;
-}
-#endif
