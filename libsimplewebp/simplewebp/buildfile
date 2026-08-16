@@ -7,14 +7,14 @@ lib{simplewebp}: libul{simplewebp}: {h c}{**} $impl_libs $intf_libs
 libs{simplewebp}: def{simplewebp}: include = ($c.target.system == 'win32-msvc')
 def{simplewebp}: libul{simplewebp}
 
-# Build options.
+# Build options. $src_base so the public include is <simplewebp.h>.
 #
-c.poptions =+ "-I$out_root" "-I$src_root"
+c.poptions =+ "-I$out_base" "-I$src_base"
 
 if ($c.target.system == 'mingw32')
   c.loptions += -Wl,--export-all-symbols
 
-# Export options.
+# Export options. Do not export SIMPLEWEBP_IMPLEMENTATION.
 #
 lib{simplewebp}:
 {
@@ -31,8 +31,7 @@ if $version.pre_release
 else
   lib{simplewebp}: bin.lib.version = "-$version.major.$version.minor"
 
-# Install into the simplewebp/ subdirectory of, say, /usr/include/
-# recreating subdirectories.
+# Install into include/simplewebp/.
 #
 h{*}:
 {
