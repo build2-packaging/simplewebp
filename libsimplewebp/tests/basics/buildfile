@@ -1,0 +1,3 @@
+import libs = libsimplewebp%lib{simplewebp}
+
+exe{driver}: {h c}{**} $libs testscript{**}

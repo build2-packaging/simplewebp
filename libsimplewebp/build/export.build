@@ -1,0 +1,6 @@
+$out_root/
+{
+  include simplewebp/
+}
+
+export $out_root/simplewebp/$import.target

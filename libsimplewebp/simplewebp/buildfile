@@ -1,0 +1,41 @@
+intf_libs = # Interface dependencies.
+impl_libs = # Implementation dependencies.
+#import xxxx_libs += libhello%lib{hello}
+
+lib{simplewebp}: libul{simplewebp}: {h c}{**} $impl_libs $intf_libs
+
+libs{simplewebp}: def{simplewebp}: include = ($c.target.system == 'win32-msvc')
+def{simplewebp}: libul{simplewebp}
+
+# Build options.
+#
+c.poptions =+ "-I$out_root" "-I$src_root"
+
+if ($c.target.system == 'mingw32')
+  c.loptions += -Wl,--export-all-symbols
+
+# Export options.
+#
+lib{simplewebp}:
+{
+  c.export.poptions = "-I$out_root" "-I$src_root"
+  c.export.libs = $intf_libs
+}
+
+# For pre-releases use the complete version to make sure they cannot
+# be used in place of another pre-release or the final version. See
+# the version module for details on the version.* variable values.
+#
+if $version.pre_release
+  lib{simplewebp}: bin.lib.version = "-$version.project_id"
+else
+  lib{simplewebp}: bin.lib.version = "-$version.major.$version.minor"
+
+# Install into the simplewebp/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+h{*}:
+{
+  install         = include/simplewebp/
+  install.subdirs = true
+}
