@@ -1,6 +1,6 @@
 : 1
 name: libsimplewebp
-version: 0.0.1-a.0.z
+version: 0.0.1
 upstream-version: 20260718
 language: c
 project: simplewebp
