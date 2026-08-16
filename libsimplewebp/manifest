@@ -1,15 +1,18 @@
 : 1
 name: libsimplewebp
-version: 0.1.0-a.0.z
+version: 0.0.1-a.0.z
+upstream-version: 20260718
 language: c
-project: build2-simplewebp
-summary: simplewebp C library
-license: other: proprietary ; Not free/open source.
+project: simplewebp
+summary: WebP image decoder C library
+license: BSD-3-Clause
+topics: graphics, image, webp, decoder
 description-file: README.md
 package-description-file: PACKAGE-README.md
-url: https://example.org/upstream
-email: upstream@example.org
-package-url: https://github.com/build2-packaging/build2-simplewebp
+url: https://github.com/MikuAuahDark/simplewebp
+src-url: https://github.com/MikuAuahDark/simplewebp
+package-url: https://github.com/build2-packaging/simplewebp
 package-email: packaging@build2.org ; Mailing list.
 depends: * build2 >= 0.18.0
 depends: * bpkg >= 0.18.0
+requires: c99
