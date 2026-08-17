@@ -5,11 +5,6 @@ This is a `build2` package for the
 single-file WebP decoder (lossy, lossless, and alpha) with no third-party
 dependencies.
 
-Upstream does not tag releases. The source identifies itself as
-`SIMPLEWEBP_VERSION` `20260718` (also recorded as `upstream-version`). This
-package uses placeholder semver `0.0.1` so a later real upstream version such
-as `0.1.0` or `1.0.0` still sorts after it.
-
 
 ## Usage
 
@@ -17,8 +12,12 @@ To start using `libsimplewebp` in your project, add the following `depends`
 value to your `manifest`, adjusting the version constraint as appropriate:
 
 ```
-depends: libsimplewebp ^0.0.1
+depends: libsimplewebp == 2026.7.18
 ```
+
+The package version is a semver-shaped coercion of the upstream date version
+(`upstream-version: 20260718`, from `SIMPLEWEBP_VERSION`). Use an exact or
+revision constraint rather than `^` or `~`.
 
 Then import the library in your `buildfile`:
 

@@ -9,12 +9,7 @@ appropriate for development rather than consumption. If you want to use
 `simplewebp` in your `build2`-based project, then instead see the accompanying
 [`PACKAGE-README.md`](libsimplewebp/PACKAGE-README.md) file.
 
-Upstream does not tag releases. `upstream/` is pinned to commit `d1a728a`
-(`SIMPLEWEBP_VERSION` `20260718`). The package version is placeholder semver
-`0.0.1` so a later real upstream version is not blocked.
-
-The development setup for `simplewebp` uses the standard `bdep`-based workflow.
-For example:
+The development setup uses the standard `bdep`-based workflow. For example:
 
 ```
 git clone --recurse-submodules https://github.com/build2-packaging/simplewebp.git
