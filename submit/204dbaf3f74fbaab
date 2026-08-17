@@ -1,0 +1,8 @@
+: 1
+name: libsimplewebp
+version: 2026.7.18
+upstream-version: 20260718
+language: c
+project: simplewebp
+summary: WebP image decoder C library
+license: BSD-3-Clause
