@@ -1,0 +1,14 @@
+: run
+:
+# Link the src data directory into $~ and pass it to the driver.
+# Trailing slash on the source keeps the directory attribute on Windows.
+# $src_base/data is a real directory of per-entry upstream symlinks
+# (build2#549).
+#
+# The driver prints a Success/Failure summary to stderr. Discard it
+# at low verbosity, same idea as cJSON's 1>! for Unity stdout.
+#
+{
+  ln -s $src_base/data/ data
+  $* data 2>!
+}

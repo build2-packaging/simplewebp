@@ -1,17 +1,8 @@
 import libs = libsimplewebp%lib{simplewebp}
 
-./: exe{driver}: c{driver} $libs
-exe{driver}: fsdir{data}: include = adhoc
-exe{driver}: test.options = $posix_string([dir_path] $out_base/data)
-
-fsdir{data}:
-% update
-{{
-  diag ln $>
-  rm -f $out_base/data
-  ln -s $posix_string([dir_path] $src_base/data) $out_base/data
-}}
-% clean
-{{
-  rm -f $out_base/data
-}}
+# Source-tree test data. Listed on the exe so update-for-test
+# sees the files. The testscript links data/ into $~. data/ is
+# a real directory of per-entry upstream symlinks (build2#549).
+#
+./: exe{driver}: c{driver} $libs testscript
+exe{driver}: file{data/**}: include = adhoc
