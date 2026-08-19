@@ -1,6 +1,5 @@
 ./: {*/ -build/}
 
-# Fixture-dependent suite. Leave it out of the published
-# archive so cppget only runs tests/basics/.
+# Large fixtures. Not in the published archive.
 #
-unit/file{*}: dist = false
+unit/file{**}: dist = false
